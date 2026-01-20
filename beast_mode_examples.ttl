@@ -1,0 +1,278 @@
+@prefix : <http://example.org/beast-mode#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+########################################################################
+# Example Instances for Beast Mode Core Ontology
+########################################################################
+# This file demonstrates how to use the Beast Mode ontology
+# with concrete examples of Agents, Capabilities, and Tasks.
+########################################################################
+
+########################################################################
+# Example Agent: Code Review Agent
+########################################################################
+
+:agent-code-reviewer a :Agent ;
+  :id "agent-001" ;
+  :name "Code Review Agent" ;
+  :description "An autonomous agent specialized in reviewing code for quality, security, and best practices" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "code-review,quality,security" ;
+  :createdAt "2024-01-15T10:00:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-20T14:30:00Z"^^xsd:dateTime ;
+  :hasCapability :capability-code-analysis ,
+                 :capability-security-scanning ,
+                 :capability-documentation-review .
+
+########################################################################
+# Example Capabilities
+########################################################################
+
+:capability-code-analysis a :Capability ;
+  :id "cap-001" ;
+  :name "Code Analysis" ;
+  :description "Ability to analyze code structure, patterns, and quality metrics" ;
+  :status "active" ;
+  :version "1.2.0" ;
+  :tags "analysis,quality,metrics" ;
+  :createdAt "2024-01-15T10:05:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-18T09:15:00Z"^^xsd:dateTime ;
+  :enablesTask :task-analyze-complexity ,
+               :task-check-code-style ,
+               :task-identify-code-smells .
+
+:capability-security-scanning a :Capability ;
+  :id "cap-002" ;
+  :name "Security Scanning" ;
+  :description "Ability to scan code for security vulnerabilities and compliance issues" ;
+  :status "active" ;
+  :version "2.0.0" ;
+  :tags "security,scanning,vulnerabilities" ;
+  :createdAt "2024-01-15T10:10:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-22T11:00:00Z"^^xsd:dateTime ;
+  :enablesTask :task-scan-dependencies ,
+               :task-detect-vulnerabilities ,
+               :task-check-secrets .
+
+:capability-documentation-review a :Capability ;
+  :id "cap-003" ;
+  :name "Documentation Review" ;
+  :description "Ability to review and validate code documentation quality" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "documentation,review,quality" ;
+  :createdAt "2024-01-15T10:15:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-15T10:15:00Z"^^xsd:dateTime ;
+  :enablesTask :task-check-doc-coverage ,
+               :task-validate-doc-quality .
+
+########################################################################
+# Example Tasks
+########################################################################
+
+:task-analyze-complexity a :Task ;
+  :id "task-001" ;
+  :name "Analyze Code Complexity" ;
+  :description "Analyzes cyclomatic complexity and other complexity metrics of code" ;
+  :hasInput "Source code files (multiple languages supported)" ;
+  :hasOutput "Complexity report with metrics and recommendations" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "complexity,metrics,analysis" ;
+  :createdAt "2024-01-15T10:20:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-15T10:20:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-code-analysis .
+
+:task-check-code-style a :Task ;
+  :id "task-002" ;
+  :name "Check Code Style" ;
+  :description "Validates code against style guidelines and formatting rules" ;
+  :hasInput "Source code files and style configuration" ;
+  :hasOutput "Style violation report with line numbers and suggestions" ;
+  :status "active" ;
+  :version "1.1.0" ;
+  :tags "style,formatting,linting" ;
+  :createdAt "2024-01-15T10:25:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-17T08:00:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-code-analysis .
+
+:task-identify-code-smells a :Task ;
+  :id "task-003" ;
+  :name "Identify Code Smells" ;
+  :description "Identifies common code smells and anti-patterns in codebase" ;
+  :hasInput "Source code files" ;
+  :hasOutput "List of detected code smells with locations and severity" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "smells,patterns,refactoring" ;
+  :createdAt "2024-01-15T10:30:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-15T10:30:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-code-analysis .
+
+:task-scan-dependencies a :Task ;
+  :id "task-004" ;
+  :name "Scan Dependencies" ;
+  :description "Scans project dependencies for known vulnerabilities" ;
+  :hasInput "Dependency manifest files (package.json, requirements.txt, etc.)" ;
+  :hasOutput "Vulnerability report with CVE IDs and remediation suggestions" ;
+  :status "active" ;
+  :version "2.0.0" ;
+  :tags "dependencies,security,scanning" ;
+  :createdAt "2024-01-15T10:35:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-22T11:05:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-security-scanning .
+
+:task-detect-vulnerabilities a :Task ;
+  :id "task-005" ;
+  :name "Detect Vulnerabilities" ;
+  :description "Detects security vulnerabilities in source code using static analysis" ;
+  :hasInput "Source code files" ;
+  :hasOutput "Security vulnerability report with severity levels and fixes" ;
+  :status "active" ;
+  :version "2.0.0" ;
+  :tags "vulnerabilities,security,static-analysis" ;
+  :createdAt "2024-01-15T10:40:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-22T11:10:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-security-scanning .
+
+:task-check-secrets a :Task ;
+  :id "task-006" ;
+  :name "Check for Exposed Secrets" ;
+  :description "Scans codebase for accidentally committed secrets, API keys, and credentials" ;
+  :hasInput "Source code files and git history" ;
+  :hasOutput "List of detected secrets with file locations and recommendations" ;
+  :status "active" ;
+  :version "1.5.0" ;
+  :tags "secrets,credentials,security" ;
+  :createdAt "2024-01-15T10:45:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-19T16:20:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-security-scanning .
+
+:task-check-doc-coverage a :Task ;
+  :id "task-007" ;
+  :name "Check Documentation Coverage" ;
+  :description "Verifies that code has adequate documentation coverage" ;
+  :hasInput "Source code files and documentation files" ;
+  :hasOutput "Documentation coverage report with missing documentation items" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "documentation,coverage,quality" ;
+  :createdAt "2024-01-15T10:50:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-15T10:50:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-documentation-review .
+
+:task-validate-doc-quality a :Task ;
+  :id "task-008" ;
+  :name "Validate Documentation Quality" ;
+  :description "Validates the quality and completeness of existing documentation" ;
+  :hasInput "Documentation files (markdown, HTML, etc.)" ;
+  :hasOutput "Documentation quality report with suggestions for improvement" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "documentation,quality,validation" ;
+  :createdAt "2024-01-15T10:55:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-15T10:55:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-documentation-review .
+
+########################################################################
+# Example Agent: Data Processing Agent
+########################################################################
+
+:agent-data-processor a :Agent ;
+  :id "agent-002" ;
+  :name "Data Processing Agent" ;
+  :description "An agent specialized in processing, transforming, and analyzing data" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "data,processing,analysis" ;
+  :createdAt "2024-01-16T09:00:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:00:00Z"^^xsd:dateTime ;
+  :hasCapability :capability-data-transformation ,
+                 :capability-data-validation .
+
+########################################################################
+# Additional Capabilities for Data Processing Agent
+########################################################################
+
+:capability-data-transformation a :Capability ;
+  :id "cap-004" ;
+  :name "Data Transformation" ;
+  :description "Ability to transform data between different formats and structures" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "transformation,data,format" ;
+  :createdAt "2024-01-16T09:05:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:05:00Z"^^xsd:dateTime ;
+  :enablesTask :task-convert-format ,
+               :task-normalize-data .
+
+:capability-data-validation a :Capability ;
+  :id "cap-005" ;
+  :name "Data Validation" ;
+  :description "Ability to validate data against schemas and business rules" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "validation,data,schema" ;
+  :createdAt "2024-01-16T09:10:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:10:00Z"^^xsd:dateTime ;
+  :enablesTask :task-validate-schema ,
+               :task-check-data-quality .
+
+########################################################################
+# Additional Tasks for Data Processing
+########################################################################
+
+:task-convert-format a :Task ;
+  :id "task-009" ;
+  :name "Convert Data Format" ;
+  :description "Converts data between different formats (JSON, CSV, XML, etc.)" ;
+  :hasInput "Data in source format and target format specification" ;
+  :hasOutput "Data converted to target format" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "conversion,format,data" ;
+  :createdAt "2024-01-16T09:15:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:15:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-data-transformation .
+
+:task-normalize-data a :Task ;
+  :id "task-010" ;
+  :name "Normalize Data" ;
+  :description "Normalizes data to a standard structure and format" ;
+  :hasInput "Raw data in various formats" ;
+  :hasOutput "Normalized data in standard format" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "normalization,data,structure" ;
+  :createdAt "2024-01-16T09:20:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:20:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-data-transformation .
+
+:task-validate-schema a :Task ;
+  :id "task-011" ;
+  :name "Validate Data Schema" ;
+  :description "Validates data against a specified schema (JSON Schema, Avro, etc.)" ;
+  :hasInput "Data and schema definition" ;
+  :hasOutput "Validation report with errors and warnings" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "validation,schema,data" ;
+  :createdAt "2024-01-16T09:25:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:25:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-data-validation .
+
+:task-check-data-quality a :Task ;
+  :id "task-012" ;
+  :name "Check Data Quality" ;
+  :description "Checks data quality metrics (completeness, accuracy, consistency)" ;
+  :hasInput "Data and quality rules" ;
+  :hasOutput "Data quality report with metrics and issues" ;
+  :status "active" ;
+  :version "1.0.0" ;
+  :tags "quality,data,metrics" ;
+  :createdAt "2024-01-16T09:30:00Z"^^xsd:dateTime ;
+  :updatedAt "2024-01-16T09:30:00Z"^^xsd:dateTime ;
+  :requiresCapability :capability-data-validation .

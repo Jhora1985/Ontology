@@ -1,0 +1,436 @@
+@prefix : <http://example.org/beast-mode#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+########################################################################
+# Ontology Metadata
+########################################################################
+
+: a owl:Ontology ;
+  rdfs:label "Beast Mode Core Ontology" ;
+  rdfs:comment "A core ontology defining the fundamental entities and relationships in the Beast Mode system. Beast Mode is a system for modeling autonomous agents, their capabilities, and the tasks they can perform." ;
+  owl:versionInfo "1.0.0" ;
+  dcterms:created "2024-01-01"^^xsd:date ;
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+  dcterms:creator "Beast Mode Core Team" .
+
+########################################################################
+# Classes
+########################################################################
+
+:Agent a owl:Class ;
+  rdfs:label "Agent" ;
+  rdfs:comment "An autonomous or semi-autonomous actor in Beast Mode. Agents possess capabilities that enable them to perform various tasks." ;
+  rdfs:isDefinedBy : .
+
+:Capability a owl:Class ;
+  rdfs:label "Capability" ;
+  rdfs:comment "A bounded skill that an agent can perform. Capabilities serve as the bridge between agents and the tasks they can execute." ;
+  rdfs:isDefinedBy : .
+
+:Task a owl:Class ;
+  rdfs:label "Task" ;
+  rdfs:comment "A unit of work with a clear input and output. Tasks represent the atomic operations that agents can perform through their capabilities." ;
+  rdfs:isDefinedBy : .
+
+########################################################################
+# Object Properties
+########################################################################
+
+:hasCapability a owl:ObjectProperty ;
+  rdfs:label "has capability" ;
+  rdfs:comment "Relates an agent to one or more capabilities that it possesses." ;
+  rdfs:domain :Agent ;
+  rdfs:range :Capability ;
+  rdfs:isDefinedBy : .
+
+:enablesTask a owl:ObjectProperty ;
+  rdfs:label "enables task" ;
+  rdfs:comment "Relates a capability to one or more tasks that it enables an agent to perform." ;
+  rdfs:domain :Capability ;
+  rdfs:range :Task ;
+  rdfs:isDefinedBy : .
+
+:performsTask a owl:ObjectProperty ;
+  rdfs:label "performs task" ;
+  rdfs:comment "Relates an agent to a task it can perform (derived through capabilities)." ;
+  rdfs:domain :Agent ;
+  rdfs:range :Task ;
+  rdfs:isDefinedBy : .
+
+:requiresCapability a owl:ObjectProperty ;
+  rdfs:label "requires capability" ;
+  rdfs:comment "Relates a task to the capability required to perform it." ;
+  rdfs:domain :Task ;
+  rdfs:range :Capability ;
+  rdfs:inverseOf :enablesTask ;
+  rdfs:isDefinedBy : .
+
+########################################################################
+# Datatype Properties
+########################################################################
+
+:name a owl:DatatypeProperty ;
+  rdfs:label "name" ;
+  rdfs:comment "A human-readable name for an entity." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:description a owl:DatatypeProperty ;
+  rdfs:label "description" ;
+  rdfs:comment "A detailed description of an entity." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:hasInput a owl:DatatypeProperty ;
+  rdfs:label "has input" ;
+  rdfs:comment "Describes the input required for a task." ;
+  rdfs:domain :Task ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:hasOutput a owl:DatatypeProperty ;
+  rdfs:label "has output" ;
+  rdfs:comment "Describes the output produced by a task." ;
+  rdfs:domain :Task ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:createdAt a owl:DatatypeProperty ;
+  rdfs:label "created at" ;
+  rdfs:comment "Timestamp when an entity was created." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:dateTime ;
+  rdfs:isDefinedBy : .
+
+:updatedAt a owl:DatatypeProperty ;
+  rdfs:label "updated at" ;
+  rdfs:comment "Timestamp when an entity was last updated." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:dateTime ;
+  rdfs:isDefinedBy : .
+
+:id a owl:DatatypeProperty ;
+  rdfs:label "identifier" ;
+  rdfs:comment "A unique identifier for an entity (typically a URI or UUID)." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:version a owl:DatatypeProperty ;
+  rdfs:label "version" ;
+  rdfs:comment "Version identifier for an entity (e.g., semantic version string)." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:status a owl:DatatypeProperty ;
+  rdfs:label "status" ;
+  rdfs:comment "Current status of an entity (e.g., 'active', 'deprecated', 'draft')." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+:tags a owl:DatatypeProperty ;
+  rdfs:label "tags" ;
+  rdfs:comment "Tags or keywords associated with an entity (comma-separated or array)." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+########################################################################
+# SHACL Shapes - Validation Constraints
+########################################################################
+
+:AgentShape a sh:NodeShape ;
+  sh:targetClass :Agent ;
+  sh:name "Agent Shape" ;
+  sh:description "Validation constraints for Agent entities" ;
+  
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Agent must have exactly one name" ;
+  ] ;
+  
+  sh:property [
+    sh:path :description ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Agent may have at most one description" ;
+  ] ;
+  
+  sh:property [
+    sh:path :hasCapability ;
+    sh:class :Capability ;
+    sh:minCount 1 ;
+    sh:message "Agent must have at least one capability" ;
+  ] ;
+  
+  sh:property [
+    sh:path :createdAt ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Agent may have at most one creation timestamp" ;
+  ] ;
+  
+  sh:property [
+    sh:path :updatedAt ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Agent may have at most one update timestamp" ;
+  ] ;
+  
+  sh:property [
+    sh:path :id ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Agent may have at most one identifier" ;
+  ] ;
+  
+  sh:property [
+    sh:path :version ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Agent may have at most one version" ;
+  ] ;
+  
+  sh:property [
+    sh:path :status ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:in ("active" "deprecated" "draft" "archived") ;
+    sh:message "Agent status must be one of: active, deprecated, draft, archived" ;
+  ] ;
+  
+  sh:property [
+    sh:path :tags ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Agent may have at most one tags value" ;
+  ] .
+
+:CapabilityShape a sh:NodeShape ;
+  sh:targetClass :Capability ;
+  sh:name "Capability Shape" ;
+  sh:description "Validation constraints for Capability entities" ;
+  
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Capability must have exactly one name" ;
+  ] ;
+  
+  sh:property [
+    sh:path :description ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Capability may have at most one description" ;
+  ] ;
+  
+  sh:property [
+    sh:path :enablesTask ;
+    sh:class :Task ;
+    sh:minCount 1 ;
+    sh:message "Capability must enable at least one task" ;
+  ] ;
+  
+  sh:property [
+    sh:path :createdAt ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Capability may have at most one creation timestamp" ;
+  ] ;
+  
+  sh:property [
+    sh:path :updatedAt ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Capability may have at most one update timestamp" ;
+  ] ;
+  
+  sh:property [
+    sh:path :id ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Capability may have at most one identifier" ;
+  ] ;
+  
+  sh:property [
+    sh:path :version ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Capability may have at most one version" ;
+  ] ;
+  
+  sh:property [
+    sh:path :status ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:in ("active" "deprecated" "draft" "archived") ;
+    sh:message "Capability status must be one of: active, deprecated, draft, archived" ;
+  ] ;
+  
+  sh:property [
+    sh:path :tags ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Capability may have at most one tags value" ;
+  ] .
+
+:TaskShape a sh:NodeShape ;
+  sh:targetClass :Task ;
+  sh:name "Task Shape" ;
+  sh:description "Validation constraints for Task entities" ;
+  
+  sh:property [
+    sh:path :name ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Task must have exactly one name" ;
+  ] ;
+  
+  sh:property [
+    sh:path :description ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Task may have at most one description" ;
+  ] ;
+  
+  sh:property [
+    sh:path :hasInput ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Task must have exactly one input description" ;
+  ] ;
+  
+  sh:property [
+    sh:path :hasOutput ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Task must have exactly one output description" ;
+  ] ;
+  
+  sh:property [
+    sh:path :requiresCapability ;
+    sh:class :Capability ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Task must require exactly one capability" ;
+  ] ;
+  
+  sh:property [
+    sh:path :createdAt ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Task may have at most one creation timestamp" ;
+  ] ;
+  
+  sh:property [
+    sh:path :updatedAt ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Task may have at most one update timestamp" ;
+  ] ;
+  
+  sh:property [
+    sh:path :id ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Task may have at most one identifier" ;
+  ] ;
+  
+  sh:property [
+    sh:path :version ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Task may have at most one version" ;
+  ] ;
+  
+  sh:property [
+    sh:path :status ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:in ("active" "deprecated" "draft" "archived") ;
+    sh:message "Task status must be one of: active, deprecated, draft, archived" ;
+  ] ;
+  
+  sh:property [
+    sh:path :tags ;
+    sh:datatype xsd:string ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    sh:message "Task may have at most one tags value" ;
+  ] .
+
+########################################################################
+# SHACL Property Shapes - Relationship Constraints
+########################################################################
+
+:hasCapabilityPropertyShape a sh:PropertyShape ;
+  sh:path :hasCapability ;
+  sh:name "hasCapability Property Shape" ;
+  sh:description "Constraints on the hasCapability relationship" ;
+  sh:class :Capability ;
+  sh:minCount 1 ;
+  sh:message "An agent must have at least one capability" .
+
+:enablesTaskPropertyShape a sh:PropertyShape ;
+  sh:path :enablesTask ;
+  sh:name "enablesTask Property Shape" ;
+  sh:description "Constraints on the enablesTask relationship" ;
+  sh:class :Task ;
+  sh:minCount 1 ;
+  sh:message "A capability must enable at least one task" .
+
+:requiresCapabilityPropertyShape a sh:PropertyShape ;
+  sh:path :requiresCapability ;
+  sh:name "requiresCapability Property Shape" ;
+  sh:description "Constraints on the requiresCapability relationship" ;
+  sh:class :Capability ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:message "A task must require exactly one capability" .
+
+########################################################################
+# SHACL Rules - Logical Constraints
+########################################################################
+
+# Note: The relationship between Agent -> Capability -> Task is enforced
+# through the property constraints defined above. The :performsTask property
+# can be inferred from the :hasCapability and :enablesTask relationships,
+# but explicit validation of this inference would require SHACL-SPARQL rules
+# which are implementation-dependent.
