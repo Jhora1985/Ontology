@@ -125,6 +125,51 @@ The ontology includes SHACL constraints that will validate:
 - Data types are correct
 - Status values are from allowed enumeration
 
+## Discovery & Matching Queries
+
+The following SPARQL query examples demonstrate how to find agents, capabilities, and tasks based on their relationships.
+
+### 1. Find agents that can perform a given task
+
+```sparql
+PREFIX : <http://example.org/beast-mode#>
+
+SELECT ?agent ?agentName
+WHERE {
+  ?agent a :Agent ;
+         :name ?agentName ;
+         :canPerformTask :specific-task .
+}
+```
+
+**Note:** `:canPerformTask` may be inferred via the property chain (`:hasCapability` o `:enablesTask`).
+
+### 2. Find tasks enabled by a capability
+
+```sparql
+PREFIX : <http://example.org/beast-mode#>
+
+SELECT ?task ?taskName
+WHERE {
+  :specific-capability :enablesTask ?task .
+  ?task a :Task ;
+        :name ?taskName .
+}
+```
+
+### 3. Find capabilities an agent has
+
+```sparql
+PREFIX : <http://example.org/beast-mode#>
+
+SELECT ?capability ?capabilityName
+WHERE {
+  :specific-agent :hasCapability ?capability .
+  ?capability a :Capability ;
+              :name ?capabilityName .
+}
+```
+
 ## Common Patterns
 
 ### Agent with Multiple Capabilities
