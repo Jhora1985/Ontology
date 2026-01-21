@@ -29,7 +29,7 @@
 
 :Capability a owl:Class ;
   rdfs:label "Capability" ;
-  rdfs:comment "A bounded skill that an agent can perform. Capabilities serve as the bridge between agents and the tasks they can execute." ;
+  rdfs:comment "A bounded skill that an agent can perform. Capabilities serve as the bridge between agents and the tasks they can execute. Capabilities are reusable, versionable, and governable assets that can be shared across multiple agents, enabling consistent skill definitions and governance." ;
   rdfs:isDefinedBy : .
 
 :Task a owl:Class ;
@@ -57,9 +57,18 @@
 
 :performsTask a owl:ObjectProperty ;
   rdfs:label "performs task" ;
-  rdfs:comment "Relates an agent to a task it can perform (derived through capabilities)." ;
+  rdfs:comment "Relates an agent to a task it performs. This is an asserted relationship (explicitly declared or observed), as opposed to :canPerformTask which is inferable via property chains (hasCapability o enablesTask)." ;
+  rdfs:subPropertyOf :canPerformTask ;
   rdfs:domain :Agent ;
   rdfs:range :Task ;
+  rdfs:isDefinedBy : .
+
+:canPerformTask a owl:ObjectProperty ;
+  rdfs:label "can perform task" ;
+  rdfs:comment "Relates an agent to a task it can perform. This property may be inferred from the property chain (hasCapability o enablesTask) or materialized by SHACL rules." ;
+  rdfs:domain :Agent ;
+  rdfs:range :Task ;
+  owl:propertyChainAxiom ( :hasCapability :enablesTask ) ;
   rdfs:isDefinedBy : .
 
 :requiresCapability a owl:ObjectProperty ;
@@ -144,11 +153,36 @@
   rdfs:range xsd:string ;
   rdfs:isDefinedBy : .
 
+:tag a owl:DatatypeProperty ;
+  rdfs:label "tag" ;
+  rdfs:comment "A single tag or keyword associated with an entity." ;
+  rdfs:domain [ a owl:Class ; owl:unionOf ( :Agent :Capability :Task ) ] ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy : .
+
+########################################################################
+# Dublin Core Metadata Properties
+########################################################################
+
+dcterms:created a owl:DatatypeProperty ;
+  rdfs:label "created" ;
+  rdfs:comment "Date of creation of the resource." ;
+  rdfs:range xsd:dateTime ;
+  rdfs:isDefinedBy dcterms: .
+
+dcterms:modified a owl:DatatypeProperty ;
+  rdfs:label "modified" ;
+  rdfs:comment "Date on which the resource was changed." ;
+  rdfs:range xsd:dateTime ;
+  rdfs:isDefinedBy dcterms: .
+
 ########################################################################
 # SHACL Shapes - Validation Constraints
 ########################################################################
 
 :AgentShape a sh:NodeShape ;
+  rdfs:label "Agent Shape" ;
+  rdfs:comment "SHACL validation constraints for Agent entities" ;
   sh:targetClass :Agent ;
   sh:name "Agent Shape" ;
   sh:description "Validation constraints for Agent entities" ;
@@ -226,6 +260,8 @@
   ] .
 
 :CapabilityShape a sh:NodeShape ;
+  rdfs:label "Capability Shape" ;
+  rdfs:comment "SHACL validation constraints for Capability entities" ;
   sh:targetClass :Capability ;
   sh:name "Capability Shape" ;
   sh:description "Validation constraints for Capability entities" ;
@@ -303,6 +339,8 @@
   ] .
 
 :TaskShape a sh:NodeShape ;
+  rdfs:label "Task Shape" ;
+  rdfs:comment "SHACL validation constraints for Task entities" ;
   sh:targetClass :Task ;
   sh:name "Task Shape" ;
   sh:description "Validation constraints for Task entities" ;
@@ -400,10 +438,14 @@
 # SHACL Property Shapes - Relationship Constraints
 ########################################################################
 
+# These property shapes ensure integrity for discovery and matching operations.
+# The cardinality and range constraints guarantee that matching queries will
+# always find valid relationships and cannot break due to missing links.
+
 :hasCapabilityPropertyShape a sh:PropertyShape ;
   sh:path :hasCapability ;
   sh:name "hasCapability Property Shape" ;
-  sh:description "Constraints on the hasCapability relationship" ;
+  sh:description "Constraints on the hasCapability relationship. Ensures every agent has at least one capability for reliable matching." ;
   sh:class :Capability ;
   sh:minCount 1 ;
   sh:message "An agent must have at least one capability" .
@@ -411,7 +453,7 @@
 :enablesTaskPropertyShape a sh:PropertyShape ;
   sh:path :enablesTask ;
   sh:name "enablesTask Property Shape" ;
-  sh:description "Constraints on the enablesTask relationship" ;
+  sh:description "Constraints on the enablesTask relationship. Ensures every capability enables at least one task for reliable matching." ;
   sh:class :Task ;
   sh:minCount 1 ;
   sh:message "A capability must enable at least one task" .
@@ -419,7 +461,7 @@
 :requiresCapabilityPropertyShape a sh:PropertyShape ;
   sh:path :requiresCapability ;
   sh:name "requiresCapability Property Shape" ;
-  sh:description "Constraints on the requiresCapability relationship" ;
+  sh:description "Constraints on the requiresCapability relationship. Ensures every task requires exactly one capability, enabling reliable task-to-capability matching." ;
   sh:class :Capability ;
   sh:minCount 1 ;
   sh:maxCount 1 ;
@@ -429,8 +471,26 @@
 # SHACL Rules - Logical Constraints
 ########################################################################
 
-# Note: The relationship between Agent -> Capability -> Task is enforced
-# through the property constraints defined above. The :performsTask property
-# can be inferred from the :hasCapability and :enablesTask relationships,
-# but explicit validation of this inference would require SHACL-SPARQL rules
-# which are implementation-dependent.
+# SHACL-SPARQL rule to materialize canPerformTask triples
+# This rule infers canPerformTask relationships from the chain: hasCapability o enablesTask
+:CanPerformTaskRuleShape a sh:NodeShape ;
+  sh:targetClass :Agent ;
+  sh:rule [
+    a sh:SPARQLRule ;
+    sh:sparql """
+      PREFIX : <http://example.org/beast-mode#>
+      CONSTRUCT {
+        ?agent :canPerformTask ?task
+      }
+      WHERE {
+        ?agent :hasCapability ?cap .
+        ?cap :enablesTask ?task
+      }
+    """ ;
+    sh:message "Agent can perform task through capability" ;
+  ] .
+
+# Note: The :canPerformTask property can be inferred via OWL property chain axiom
+# (hasCapability o enablesTask -> canPerformTask) or materialized using the SHACL-SPARQL
+# rule above. The OWL inference is preferred in OWL-aware systems, while the SHACL rule
+# provides a fallback for systems that support SHACL-SPARQL but not OWL reasoning.
