@@ -37,7 +37,7 @@ ex:ClaimB a :Claim ;
 
 # Policy: translation disputes should escalate for human review
 ex:EscalateTranslationDisputes a :ResolutionPolicy ;
-  :claimText "If disputeType is translation or interpretation, escalate to human review unless claims are identical and confidence >= 0.95." .
+  :policyText "If disputeType is translation or interpretation, escalate to human review unless claims are identical and confidence >= 0.95." .
 
 # Resolution: this dispute is escalated (no automated winner)
 ex:SpecInterpretationResolution a :Resolution ;

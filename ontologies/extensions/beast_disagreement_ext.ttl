@@ -52,6 +52,13 @@
   rdfs:range xsd:string ;
   rdfs:isDefinedBy <http://example.org/beast-mode-disagreement> .
 
+:policyText a owl:DatatypeProperty ;
+  rdfs:label "policy text" ;
+  rdfs:comment "Human-readable description of a resolution policy." ;
+  rdfs:domain :ResolutionPolicy ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-disagreement> .
+
 :claimConfidence a owl:DatatypeProperty ;
   rdfs:label "claim confidence" ;
   rdfs:comment "Confidence in this claim (0.0 to 1.0)." ;
@@ -89,8 +96,8 @@
   rdfs:range :Agent ;
   rdfs:isDefinedBy <http://example.org/beast-mode-disagreement> .
 
-:basedOnEvidence a owl:ObjectProperty ;
-  rdfs:label "based on evidence" ;
+:supportingEvidence a owl:ObjectProperty ;
+  rdfs:label "supporting evidence" ;
   rdfs:comment "Evidence artifacts supporting a claim (benchmarks, logs, citations, traces)." ;
   rdfs:domain :Claim ;
   rdfs:range rdfs:Resource ;
