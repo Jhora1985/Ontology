@@ -1,0 +1,30 @@
+@prefix : <http://example.org/beast-mode#> .
+@prefix ex: <http://example.org/example#> .
+
+#######################################################################
+# Example: Trust assertion (valid against core + trust extension)
+#######################################################################
+
+# Capability + Task (core-required fields included)
+ex:DeployCapability a :Capability ;
+  :name "Deployment" ;
+  :enablesTask ex:DeployToProd .
+
+ex:DeployToProd a :Task ;
+  :name "Deploy to Production" ;
+  :hasInput "build artifact" ;
+  :hasOutput "deployed release" ;
+  :requiresCapability ex:DeployCapability .
+
+# Agent (core-required fields included)
+ex:DeployBot a :Agent ;
+  :name "Deploy Bot" ;
+  :hasCapability ex:DeployCapability .
+
+# Trust assertion: agent is trusted for a specific task (task-scoped)
+ex:DeployBot_TrustForProdDeploy a :TrustAssertion ;
+  :trustForAgent ex:DeployBot ;
+  :trustForTask ex:DeployToProd ;
+  :trustLevel 4 ;
+  :trustConfidence 0.90 ;
+  :trustScope "task-scoped" .
