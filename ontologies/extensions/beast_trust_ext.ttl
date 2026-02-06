@@ -1,0 +1,127 @@
+@prefix : <http://example.org/beast-mode#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+#######################################################################
+# Trust Extension Ontology
+#######################################################################
+
+<http://example.org/beast-mode-trust> a owl:Ontology ;
+  rdfs:label "Beast Mode Trust Extension" ;
+  rdfs:comment "Extension ontology defining Trust as a scoped, evidence-backed assertion about an agent's suitability to perform work." ;
+  owl:imports <http://example.org/beast-mode#> ;
+  owl:versionInfo "0.1.0" ;
+  dcterms:created "2024-01-01T00:00:00"^^xsd:dateTime .
+
+#######################################################################
+# Classes
+#######################################################################
+
+:TrustAssertion a owl:Class ;
+  rdfs:label "Trust Assertion" ;
+  rdfs:comment "An assertion describing trust in an Agent, optionally scoped to a specific Task or Capability. Trust is not the same as capability." ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+#######################################################################
+# Datatype Properties
+#######################################################################
+
+:trustLevel a owl:DatatypeProperty ;
+  rdfs:label "trust level" ;
+  rdfs:comment "Ordinal trust level (e.g., 1-5) indicating how much autonomy/authority is granted. Higher is more trusted." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range xsd:integer ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+:trustConfidence a owl:DatatypeProperty ;
+  rdfs:label "trust confidence" ;
+  rdfs:comment "Confidence in this trust assertion (0.0 to 1.0). Optional." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range xsd:decimal ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+:trustScope a owl:DatatypeProperty ;
+  rdfs:label "trust scope" ;
+  rdfs:comment "Optional scope label such as 'global', 'task-scoped', or 'capability-scoped'." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range xsd:string ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+#######################################################################
+# Object Properties
+#######################################################################
+
+:trustForAgent a owl:ObjectProperty ;
+  rdfs:label "trust for agent" ;
+  rdfs:comment "Links a trust assertion to the agent it applies to." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range :Agent ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+:trustForTask a owl:ObjectProperty ;
+  rdfs:label "trust for task" ;
+  rdfs:comment "Optional scope: the trust assertion applies for a specific task." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range :Task ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+:trustForCapability a owl:ObjectProperty ;
+  rdfs:label "trust for capability" ;
+  rdfs:comment "Optional scope: the trust assertion applies for a specific capability." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range :Capability ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+:trustEvidence a owl:ObjectProperty ;
+  rdfs:label "trust evidence" ;
+  rdfs:comment "Links to evidence artifacts supporting the trust assertion (evals, logs, audits, approvals)." ;
+  rdfs:domain :TrustAssertion ;
+  rdfs:range rdfs:Resource ;
+  rdfs:isDefinedBy <http://example.org/beast-mode-trust> .
+
+#######################################################################
+# SHACL Shapes
+#######################################################################
+
+:TrustAssertionShape a sh:NodeShape ;
+  sh:targetClass :TrustAssertion ;
+  sh:property [
+    sh:path :trustForAgent ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class :Agent ;
+  ] ;
+  sh:property [
+    sh:path :trustLevel ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 1 ;
+    sh:maxInclusive 5 ;
+  ] ;
+  sh:property [
+    sh:path :trustConfidence ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 0.0 ;
+    sh:maxInclusive 1.0 ;
+  ] ;
+  sh:property [
+    sh:path :trustScope ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
+  ] ;
+  sh:property [
+    sh:path :trustForTask ;
+    sh:maxCount 1 ;
+    sh:class :Task ;
+  ] ;
+  sh:property [
+    sh:path :trustForCapability ;
+    sh:maxCount 1 ;
+    sh:class :Capability ;
+  ] .
