@@ -1,39 +1,50 @@
 # Issue #1: Core capability inference
 
 ## Intent
-Formalize the core ontology pattern that allows an Agent’s effective capabilities to be derived from the tasks it supports (capability inference chain), reducing duplicated assertions and preventing drift between Task requirements and Agent capabilities.
+Formalize a capability inference pattern that ensures Agent capability assertions remain consistent with Task requirements.
+
+## Core Structure vs Inference
+
+- Core ontological structure: **Agent → Capability → Task**
+- Inference / validation pattern: if an Agent is modeled as supporting a Task, and that Task requires a Capability, then the Agent can be inferred or validated to have that Capability.
+
+The fundamental structure flows from Agent to Capability to Task.  
+The Task-based reasoning path is a validation/inference mechanism, not the primary ontological chain.
 
 ## Context
-During early development of the Beast Mode core ontology, we introduced a structured pattern to formalize:
+As the Beast Mode ontology evolved, we formalized:
 
 - Capability assets
-- The Agent → Task → Capability inference chain
-- Discovery constraints associated with capability reasoning
+- Agent–Capability–Task relationships
+- Constraints ensuring consistency between declared Task support and Capability assertions
 
-This issue provides traceability between the conceptual discussion and the concrete implementation.
+This prevents semantic drift between Task modeling and Agent capability claims.
 
 ## What Changed (Implementation Summary)
 - Core ontology updated to formalize:
   - Capability asset modeling
-  - Inference chain semantics
-  - Discovery-related constraints
-- SHACL constraints aligned to support validation of the inference pattern
+  - Agent–Capability–Task structural relationships
+  - Validation/inference alignment
+- SHACL constraints aligned to support consistent capability attribution
 - Example usage added where applicable
 
 ## Primary Review Cues (Fast Skim)
-For implementation details, please review:
 
-- Core ontology definitions governing Agent–Task–Capability relationships
-- SHACL shapes that validate the inference chain and required properties
-- Any example TTL demonstrating the inference behavior
+Please review:
+
+- Core ontology definitions governing Agent–Capability–Task relationships
+- SHACL shapes validating structural consistency
+- Example TTL demonstrating capability alignment
 
 ## Implementation Anchor
+
 Primary commit implementing this work:
 
 - ceebfa4  
   "Core ontology: formalize capability assets, inference chain, and discovery constraints"
 
 ## Traceability Map
+
 Issue → Concept → Commit → Files
 
-This document exists solely to make review faster and to clearly map Issue #1 to its implementation anchor.
+This document exists to provide clear linkage between the conceptual issue and its concrete implementation anchor for rapid review.
