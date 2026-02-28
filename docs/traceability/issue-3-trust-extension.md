@@ -12,11 +12,9 @@ This work formalizes trust-related properties and validates them using SHACL.
 
 ## What Changed (Implementation Summary)
 
-Implemented in commit `0657661` on branch `feature/trust-extension` (pending merge into main):
+Implemented in commit:
 
-- `ontologies/extensions/beast_trust_ext.ttl`
-- `examples/trust/README.md`
-- `examples/trust/trust_example.ttl`
+`06576615c556265111c69915e5a530e173603c15`
 
 This commit introduces:
 
@@ -27,13 +25,15 @@ This commit introduces:
 
 ## Primary Review Cues (Fast Skim)
 
-Please review:
+Please review the implementation commit directly:
 
-- Commit `0657661`
-- Ontology extension file: `ontologies/extensions/beast_trust_ext.ttl`
-- Example usage under `examples/trust/`
+- Commit: https://github.com/louspringer/Beast-mode-Ontology/commit/06576615c556265111c69915e5a530e173603c15
 
-Note: These files currently exist on branch `feature/trust-extension` and are not yet merged into `main`.
+This provides stable access to:
+
+- Trust extension ontology file
+- Example TTL
+- SHACL validation definitions
 
 ## Implementation Anchor
 
@@ -44,10 +44,11 @@ Primary commit implementing this work:
 
 ## Traceability Map
 
-| Concept                     | Commit   | File(s) |
-|----------------------------|----------|---------|
-| Trust extension module     | 0657661  | ontologies/extensions/beast_trust_ext.ttl |
-| Trust example              | 0657661  | examples/trust/trust_example.ttl |
-| SHACL validation structure | 0657661  | ontologies/extensions/beast_trust_ext.ttl |
+| Concept                     | Commit   |
+|----------------------------|----------|
+| Trust extension module     | 0657661  |
+| Trust property semantics   | 0657661  |
+| SHACL validation structure | 0657661  |
+| Example usage              | 0657661  |
 
-This document links the conceptual Issue to its concrete implementation artifacts.
+This document links the conceptual Issue directly to its immutable implementation commit.
