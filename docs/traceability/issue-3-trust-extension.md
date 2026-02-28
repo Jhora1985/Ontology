@@ -44,11 +44,15 @@ Primary commit implementing this work:
 
 ## Traceability Map
 
-| Concept                     | Commit   |
+## Traceability Map
+
+| Concept                    | Commit   |
 |----------------------------|----------|
 | Trust extension module     | 0657661  |
 | Trust property semantics   | 0657661  |
 | SHACL validation structure | 0657661  |
 | Example usage              | 0657661  |
+
+This document links the conceptual Issue directly to its immutable implementation commit.
 
 This document links the conceptual Issue directly to its immutable implementation commit.
