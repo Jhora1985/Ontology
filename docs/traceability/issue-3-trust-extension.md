@@ -16,6 +16,7 @@ This extension provides a formal structure for modeling trust-related properties
 - Provided a validated example demonstrating correct usage
 
 ## Primary Review Cues (Fast Skim)
+
 Please review:
 
 - ontologies/extensions/beast_trust_ext.ttl
