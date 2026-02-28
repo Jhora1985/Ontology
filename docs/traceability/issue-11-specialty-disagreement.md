@@ -1,42 +1,52 @@
-# Issue #11: Specialty + Disagreement ontology extensions
+# Issue #11: Specialty + disagreement modeling
 
 ## Intent
-Introduce structured ontology support for specialty agents and explicit modeling of disagreement between specialty outputs.
+
+Document the specialty constructs and structured disagreement semantics implemented in the referenced commit, ensuring clear traceability between the conceptual models and their concrete implementation.
 
 ## Context
-As the ecosystem expanded to include specialty beasts (agents with domain-specific strengths), we needed a way to represent:
 
-- specialty roles and domain focus
-- conflicting outputs between specialty agents
-- structured disagreement states tied to the same subject/claim
-- signals such as trust, confidence, and supporting evidence
-
-This work formalizes disagreement as a first-class modeling construct.
+As Beast Mode evolves into a multi-agent ecosystem, agents may have specialized strengths and may disagree on interpretations or recommendations. This work introduces explicit modeling for specialty and disagreement so the ecosystem can represent expertise boundaries and capture disagreements in a structured, inspectable way.
 
 ## What Changed (Implementation Summary)
-- Added specialty ontology extensions
-- Introduced disagreement modeling constructs
-- Linked disagreement instances to:
-  - participating specialty agents
-  - conflicting assertions/recommendations
-  - subject/claim under evaluation
-- Provided example TTL demonstrating specialty + disagreement scenarios
+
+The referenced implementation commit:
+
+`7b8d6d7ad61bacefa21e5e461b087f8db51ac782`
+
+Introduces:
+
+- Specialty modeling constructs (to represent agent/domain specialization)
+- Disagreement modeling constructs (to represent structured disagreement semantics)
+- Example usage demonstrating expected patterns
+
+This PR adds traceability documentation only and does not modify ontology logic.
 
 ## Primary Review Cues (Fast Skim)
-Please focus on:
-- Ontology extension module(s) defining specialty constructs
-- Disagreement modeling class(es) and relationships
-- How conflicting assertions are represented
-- Example TTL demonstrating disagreement scenarios
-- Any SHACL shapes enforcing minimum structure (if present)
+
+Please review implementation commit:
+
+`7b8d6d7ad61bacefa21e5e461b087f8db51ac782`
+
+Focus areas:
+
+- Specialty constructs: what is being modeled and how it is intended to be used
+- Disagreement constructs: how disagreements are represented and what fields/relationships are required
+- Example TTL demonstrating the intended usage patterns
 
 ## Implementation Anchor
+
 Primary commit implementing this work:
 
-- 7b8d6d7  
+- 7b8d6d7ad61bacefa21e5e461b087f8db51ac782  
   "Add specialty and disagreement ontology extensions with examples"
 
 ## Traceability Map
-Issue → Concept → Commit → Files
 
-This document exists to make review fast and to map Issue #11 to its implementation anchor.
+| Concept                        | Commit                                      |
+|-------------------------------|---------------------------------------------|
+| Specialty modeling constructs | 7b8d6d7ad61bacefa21e5e461b087f8db51ac782     |
+| Disagreement semantics        | 7b8d6d7ad61bacefa21e5e461b087f8db51ac782     |
+| Example usage                 | 7b8d6d7ad61bacefa21e5e461b087f8db51ac782     |
+
+This document links the conceptual Issue directly to its specific implementation commit reference.
