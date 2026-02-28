@@ -1,35 +1,47 @@
-# Issue #7: SHACL rule construct fix + dcterms:created datatype alignment
+# Issue #7: SHACL rule fix + dcterms alignment
 
 ## Intent
-Correct a SHACL rule construct and align the datatype of `dcterms:created` to ensure consistent validation behavior and semantic correctness across the ontology.
+
+Correct a SHACL rule construct issue and align `dcterms:created` datatype usage to ensure validation behavior and metadata semantics remain consistent across the ontology.
 
 ## Context
-During ontology refinement, we identified:
 
-- A SHACL rule construct that did not align with intended validation behavior.
-- A datatype mismatch or inconsistency for `dcterms:created`.
-
-These issues could cause validation ambiguity or unintended SHACL behavior.
+As SHACL constraints and metadata fields matured, a mismatch in rule construction and/or datatype expectations created validation friction and inconsistent interpretation of `dcterms:created`. This change fixes the SHACL construct and standardizes datatype alignment.
 
 ## What Changed (Implementation Summary)
-- Corrected SHACL rule construct logic to reflect intended constraint behavior.
-- Aligned `dcterms:created` usage to the expected datatype.
-- Ensured consistency across ontology and SHACL shapes.
+
+Implemented in commit:
+
+`c79cec4f7fb38829660570e8bf1b624aabcd15bf`
+
+This commit introduces:
+
+- Correction to the affected SHACL rule construct
+- Alignment of `dcterms:created` datatype usage for consistency
 
 ## Primary Review Cues (Fast Skim)
-Please focus on:
 
-- SHACL rule definitions affected by this change
-- Any constructs using `sh:rule` or related validation logic
-- All occurrences of `dcterms:created` and its datatype declaration
+Please review commit:
+
+`c79cec4f7fb38829660570e8bf1b624aabcd15bf`
+
+Focus areas:
+
+- The corrected SHACL rule logic and expected validation behavior
+- Any updates related to `dcterms:created` typing and downstream consistency
 
 ## Implementation Anchor
+
 Primary commit implementing this work:
 
-- c79cec4  
+- c79cec4f7fb38829660570e8bf1b624aabcd15bf  
   "Fix SHACL rule construct and align dcterms:created datatype"
 
 ## Traceability Map
-Issue → Concept → Commit → Files
 
-This document exists to provide a clear linkage between Issue #7 and its implementation anchor for rapid review.
+| Concept                           | Commit                                      |
+|-----------------------------------|---------------------------------------------|
+| SHACL rule construct correction   | c79cec4f7fb38829660570e8bf1b624aabcd15bf    |
+| `dcterms:created` datatype align. | c79cec4f7fb38829660570e8bf1b624aabcd15bf    |
+
+This document links the conceptual Issue directly to its immutable implementation commit.
