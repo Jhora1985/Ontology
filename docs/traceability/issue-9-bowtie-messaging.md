@@ -25,6 +25,7 @@ Please review:
 - `ontologies/modules/messaging/beast_messaging_core.ttl`
 - `ontologies/modules/network/beast_network_core.ttl`
 - `ontologies/modules/messaging/beast_a2a_shapes.ttl`
+- `ontologies/modules/messaging/beast_a2a_channel_impl.ttl`
 - `ontologies/modules/messaging/beast_mailbox_impl.ttl`
 - `ontologies/alignments/beast_mailbox_alignment.ttl`
 
@@ -48,6 +49,7 @@ Primary commit implementing this work:
 |-------------------------------------|----------|-------|
 | Bow-tie messaging constructs        | 3a3d398  | ontologies/modules/messaging/beast_messaging_core.ttl |
 | Network module additions            | 3a3d398  | ontologies/modules/network/beast_network_core.ttl |
+| A2A channel + AgentCard implementation | 3a3d398  | ontologies/modules/messaging/beast_a2a_channel_impl.ttl |
 | Messaging SHACL validation shapes   | 3a3d398  | ontologies/modules/messaging/beast_a2a_shapes.ttl |
 | Mailbox implementation alignment    | 3a3d398  | ontologies/modules/messaging/beast_mailbox_impl.ttl |
 | Mailbox semantic alignment mapping  | 3a3d398  | ontologies/alignments/beast_mailbox_alignment.ttl |
